@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>إبراهيم (Otk1) · Streamer</title>
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ----- RESET & BASE ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            background: #0b0610;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            overflow-x: hidden;
+            direction: rtl;
+            position: relative;
+        }
+
+        /* ----- Animated Background with Particles (Canvas) ----- */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ----- Glow overlay ----- */
+        .bg-glow {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 40%, rgba(120, 40, 160, 0.25) 0%, rgba(20, 10, 30, 0.9) 70%);
+            z-index: 0;
+            animation: rotateGlow 30s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ----- Main Card (glass + animated border) ----- */
+        .card {
+            position: relative;
+            z-index: 10;
+            max-width: 920px;
+            width: 100%;
+            background: rgba(20, 10, 30, 0.65);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border-radius: 56px;
+            padding: 3rem 3rem 2.5rem;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(180, 80, 220, 0.2);
+            border: 1px solid rgba(200, 130, 255, 0.15);
+            transition: all 0.4s ease;
+            animation: fadeInUp 1s ease-out;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 58px;
+            padding: 2px;
+            background: conic-gradient(from 0deg, #a855f7, #d946ef, #a855f7, #d946ef, #a855f7);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            animation: spinBorder 8s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes spinBorder {
+            to { transform: rotate(360deg); }
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(40px) scale(0.96); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* ----- HEADER ----- */
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(200, 130, 255, 0.15);
+            position: relative;
+        }
+
+        .name-title h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #e879f9, #b57ac9, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+            line-height: 1.1;
+            position: relative;
+            display: inline-block;
+        }
+
+        .name-title h1::after {
+            content: 'Otk1';
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(200, 130, 255, 0.2);
+            z-index: -1;
+            transform: translate(2px, 2px);
+            opacity: 0.5;
+            filter: blur(2px);
+        }
+
+        .name-title .sub {
+            font-size: 1.1rem;
+            color: #c9a8d4;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-top: 0.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .badge {
+            background: rgba(168, 85, 247, 0.2);
+            backdrop-filter: blur(8px);
+            padding: 0.6rem 1.6rem;
+            border-radius: 60px;
+            border: 1px solid rgba(200, 130, 255, 0.3);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #d9b0e6;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.1);
+            letter-spacing: 1px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .badge i {
+            color: #d946ef;
+            animation: pulseIcon 2s infinite;
+        }
+
+        @keyframes pulseIcon {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        /* ----- CONTENT ROWS ----- */
+        .content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+
+        .info-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+            transition: all 0.3s;
+            padding: 0.2rem 0.5rem;
+            border-radius: 16px;
+        }
+
+        .info-row:hover {
+            background: rgba(168, 85, 247, 0.05);
+            transform: translateX(-4px);
+        }
+
+        .info-row .ar {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #f5ecfa;
+            display: flex;
+            align-items: baseline;
+            gap: 0.7rem;
+            flex-wrap: wrap;
+        }
+
+        .info-row .ar i {
+            color: #d946ef;
+            width: 2rem;
+            font-size: 1.3rem;
+            text-align: center;
+            text-shadow: 0 0 15px rgba(217, 70, 239, 0.3);
+        }
+
+        .info-row .en {
+            font-size: 0.95rem;
+            color: #b095c0;
+            padding-right: 2.8rem;
+            border-right: 2px solid rgba(217, 70, 239, 0.2);
+            padding-right: 1.2rem;
+            margin-right: 0.4rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            transition: color 0.3s;
+        }
+
+        .info-row:hover .en {
+            color: #d0b8dd;
+        }
+
+        /* Reason box special */
+        .reason-box {
+            background: linear-gradient(145deg, rgba(80, 40, 100, 0.3), rgba(40, 20, 60, 0.4));
+            border-radius: 28px;
+            padding: 1.4rem 2rem;
+            margin-top: 0.2rem;
+            border: 1px solid rgba(200, 130, 255, 0.15);
+            backdrop-filter: blur(4px);
+            transition: all 0.4s ease;
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.05);
+        }
+
+        .reason-box:hover {
+            border-color: rgba(217, 70, 239, 0.4);
+            box-shadow: 0 0 50px rgba(168, 85, 247, 0.15);
+            transform: scale(1.01);
+        }
+
+        .reason-box .ar {
+            font-size: 1.2rem;
+        }
+        .reason-box .en {
+            padding-right: 1.8rem;
+        }
+
+        /* ----- LINKS (social) ----- */
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            padding-top: 1.8rem;
+            border-top: 1px solid rgba(200, 130, 255, 0.15);
+            justify-content: center;
+        }
+
+        .links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 2.4rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background: rgba(30, 15, 40, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(200, 130, 255, 0.2);
+            color: #e8d5f0;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .links a::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(217, 70, 239, 0.2), rgba(168, 85, 247, 0.1));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .links a:hover::before {
+            opacity: 1;
+        }
+
+        .links a i {
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .links a.youtube:hover {
+            background: #cc0000;
+            border-color: #cc0000;
+            color: #fff;
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 15px 30px -8px rgba(204, 0, 0, 0.5);
+        }
+
+        .links a.youtube:hover i {
+            transform: scale(1.2);
+        }
+
+        .links a.tiktok:hover {
+            background: #000;
+            border-color: #fff;
+            color: #fff;
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.8);
+        }
+
+        .links a.tiktok:hover i {
+            color: #ff0050;
+            transform: scale(1.2);
+        }
+
+        /* ----- Footer ----- */
+        .footer-note {
+            margin-top: 2.5rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #6a4f77;
+            border-top: 1px solid rgba(200, 130, 255, 0.08);
+            padding-top: 1.8rem;
+            letter-spacing: 2px;
+            font-weight: 300;
+        }
+
+        .footer-note i {
+            color: #b57ac9;
+            margin: 0 6px;
+            animation: pulseIcon 3s infinite;
+        }
+
+        /* ----- Responsive ----- */
+        @media (max-width: 700px) {
+            .card {
+                padding: 2rem 1.5rem;
+                border-radius: 32px;
+            }
+            .name-title h1 {
+                font-size: 2.2rem;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.8rem;
+            }
+            .badge {
+                align-self: flex-start;
+            }
+            .info-row .ar {
+                font-size: 1.05rem;
+            }
+            .info-row .en {
+                font-size: 0.85rem;
+                padding-right: 1.8rem;
+            }
+            .links a {
+                padding: 0.6rem 1.6rem;
+                font-size: 0.9rem;
+                width: 100%;
+                justify-content: center;
+            }
+            .reason-box {
+                padding: 1rem 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .name-title h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a0b1f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a855f7;
+            border-radius: 20px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d946ef;
+        }
+
+        /* Glitch text effect on h1 hover */
+        .name-title h1:hover {
+            animation: glitch 0.6s infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: skew(0deg, 0deg); }
+            20% { transform: skew(2deg, -1deg); }
+            40% { transform: skew(-2deg, 1deg); }
+            60% { transform: skew(1deg, -2deg); }
+            80% { transform: skew(-1deg, 2deg); }
+            100% { transform: skew(0deg, 0deg); }
+        }
+
+        /* Floating shapes */
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.1), transparent 70%);
+            animation: floatShape 20s infinite alternate ease-in-out;
+        }
+        .shape:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: -80px;
+            left: -80px;
+            animation-duration: 25s;
+        }
+        .shape:nth-child(2) {
+            width: 400px;
+            height: 400px;
+            bottom: -120px;
+            right: -120px;
+            animation-duration: 30s;
+            background: radial-gradient(circle, rgba(217, 70, 239, 0.08), transparent 70%);
+        }
+        .shape:nth-child(3) {
+            width: 200px;
+            height: 200px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-duration: 35s;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.06), transparent 70%);
+        }
+        @keyframes floatShape {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(60px, 30px) scale(1.2); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Particles (Canvas) -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Floating shapes -->
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="bg-glow"></div>
+
+    <!-- ===== MAIN CARD ===== -->
+    <div class="card">
+
+        <!-- HEADER -->
+        <div class="header">
+            <div class="name-title">
+                <h1>إبراهيم <span style="font-weight:400;color:#b095c0;font-size:2rem;">(Otk1)</span></h1>
+                <div class="sub">
+                    <i class="fas fa-gamepad" style="color:#d946ef;"></i>
+                    ستريمر · يوتيوبر
+                    <span style="font-size:0.7rem;color:#7a5f85;font-weight:300;margin-right:8px;">|</span>
+                    <span style="font-size:0.8rem;color:#a87bb5;">Streamer · YouTuber</span>
+                </div>
+            </div>
+            <div class="badge">
+                <i class="fas fa-globe"></i> AR · EN
+                <i class="fas fa-circle" style="font-size:0.5rem;color:#22c55e;margin-right:4px;"></i>
+                <span style="font-size:0.7rem;font-weight:300;color:#22c55e;">LIVE</span>
+            </div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="content">
+
+            <!-- 1. المهنة -->
+            <div class="info-row">
+                <div class="ar">
+                    <i class="fas fa-briefcase"></i> المهنة:
+                    <span style="font-weight:400;">ستريمر ويوتيوبر.</span>
+                </div>
+                <div class="en">
+                    <i class="fas fa-chevron-left" style="margin-left:6px;font-size:0.7rem;color:#7a5f85;"></i>
+                    Profession: Streamer &amp; YouTuber.
+                </div>
+            </div>
+
+            <!-- 2. منصات البث -->
+            <div class="info-row">
+                <div class="ar">
+                    <i class="fas fa-broadcast-tower"></i> منصات البث:
+                    <span style="font-weight:400;">TikTok و YouTube.</span>
+                </div>
+                <div class="en">
+                    <i class="fas fa-chevron-left" style="margin-left:6px;font-size:0.7rem;color:#7a5f85;"></i>
+                    Streaming platforms: TikTok &amp; YouTube.
+                </div>
+            </div>
+
+            <!-- 3. معلومات عني -->
+            <div class="info-row">
+                <div class="ar">
+                    <i class="fas fa-info-circle"></i> معلومات عني:
+                </div>
+                <div class="ar" style="font-weight:400;padding-right:2.8rem;font-size:1.05rem;color:#e6d7ed;">
+                    عندي PC قوي جدًا ويشغل أي لعبة أو مود بدون أي مشاكل، وأحب أصنع محتوى وأجرب سيرفرات جديدة.
+                </div>
+                <div class="en" style="margin-top:2px;">
+                    <i class="fas fa-chevron-left" style="margin-left:6px;font-size:0.7rem;color:#7a5f85;"></i>
+                    I have a very powerful PC that runs any game or mod without issues. I love creating content and trying new servers.
+                </div>
+            </div>
+
+            <!-- 4. سبب التقديم (box) -->
+            <div class="reason-box">
+                <div class="info-row" style="gap:0;">
+                    <div class="ar" style="font-size:1.2rem;">
+                        <i class="fas fa-heart" style="color:#d946ef;text-shadow:0 0 20px rgba(217,70,239,0.5);"></i> سبب التقديم:
+                    </div>
+                    <div class="ar" style="font-weight:400;padding-right:2.8rem;font-size:1.05rem;color:#e6d7ed;margin-top:4px;">
+                        أريد أتعرف على شباب السيرفر، نصير أصدقاء، ونلعب سوا بأي سيرفر. أحب التعاون وأتمنى أكون عضو فعال ومتواجد باستمرار.
+                    </div>
+                    <div class="en" style="margin-top:6px;padding-right:1.8rem;">
+                        <i class="fas fa-chevron-left" style="margin-left:6px;font-size:0.7rem;color:#7a5f85;"></i>
+                        I want to get to know the server guys, become friends, and play together on any server. I love collaboration and hope to be an active, consistent member.
+                    </div>
+                </div>
+            </div>
+
+            <!-- LINKS -->
+            <div class="links">
+                <a href="https://www.youtube.com/@Otk1141" target="_blank" class="youtube">
+                    <i class="fab fa-youtube"></i> YouTube
+                </a>
+                <a href="https://www.tiktok.com/@otk1141?lang=en" target="_blank" class="tiktok">
+                    <i class="fab fa-tiktok"></i> TikTok
+                </a>
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer-note">
+            <i class="fas fa-crown"></i>
+            Otk1 · 2026
+            <i class="fas fa-crown"></i>
+        </div>
+
+    </div>
+
+    <!-- ===== PARTICLES SCRIPT ===== -->
+    <script>
+        (function() {
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+
+            let width, height;
+            let particles = [];
+            const PARTICLE_COUNT = 120;
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.size = Math.random() * 2.5 + 1;
+                    this.speedX = (Math.random() - 0.5) * 0.5;
+                    this.speedY = (Math.random() - 0.5) * 0.5;
+                    this.opacity = Math.random() * 0.5 + 0.2;
+                    this.color = `hsla(${280 + Math.random() * 40}, 80%, 70%, ${this.opacity})`;
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+
+                    if (this.x < 0 || this.x > width) this.speedX *= -1;
+                    if (this.y < 0 || this.y > height) this.speedY *= -1;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.shadowColor = '#a855f7';
+                    ctx.shadowBlur = 12;
+                    ctx.fill();
+                }
+            }
+
+            function initParticles() {
+                particles = [];
+                for (let i = 0; i < PARTICLE_COUNT; i++) {
+                    particles.push(new Particle());
+                }
+            }
+            initParticles();
+
+            function connectParticles() {
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 150) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(168, 85, 247, ${0.12 * (1 - dist / 150)})`;
+                            ctx.lineWidth = 0.6;
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+
+                connectParticles();
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+
+            // Resize particles on window resize
+            window.addEventListener('resize', () => {
+                resize();
+                initParticles();
+            });
+        })();
+    </script>
+
+</body>
+</html>
